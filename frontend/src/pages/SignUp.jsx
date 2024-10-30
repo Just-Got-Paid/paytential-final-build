@@ -31,18 +31,9 @@ export default function SignUpPage() {
     } 
 
     // Create the user via the user-adapter
-    const [user, error] = await createUser({ username, password });
+    const [user, error] = await createUser({ username, password, organization, isAdmin });
     if (error) return setErrorText(error.message);
     
-    // Create the user profile
-    const [profile, profileError] = await createUserProfile({ 
-      userId: user.id,
-      organization,
-      isAdmin
-    });
-    if (profileError) return setErrorText(profileError.message);
-
-    // Set the current user context and navigate to home
     setCurrentUser(user);
     navigate('/');
   };
