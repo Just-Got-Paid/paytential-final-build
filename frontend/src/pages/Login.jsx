@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [errorText, setErrorText] = useState('');
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
 
+  // redirect to the user's page if logged in -> what are we going to see in the user page?
   if (currentUser) return <Navigate to={`/users/${currentUser.id}`} />;
 
   useEffect(() => {
@@ -19,8 +20,12 @@ export default function LoginPage() {
     event.preventDefault();
     setErrorText('');
     const formData = new FormData(event.target);
+
+    // uses the logUserIn from auth-adapter 
     const [user, error] = await logUserIn(Object.fromEntries(formData));
     if (error) return setErrorText(error.message);
+
+    // updates current user Context 
     setCurrentUser(user);
     navigate(`/users/${user.id}`);
   };
