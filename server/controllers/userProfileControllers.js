@@ -55,7 +55,7 @@ exports.deleteUserProfile = async (req, res) => {
 
 	try {
 		const deleted = await UserProfile.delete(userId);
-		if (!deleted) return res.sendStatus(404); // Not found
+		if (!deleted) return res.sendStatus(404); // Not foundsr
 		res.sendStatus(204); // No content, successful deletion
 	} catch (error) {
 		res.status(500).json({ error: "Failed to delete user profile." });

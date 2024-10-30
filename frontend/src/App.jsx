@@ -10,7 +10,7 @@ import { checkForLoggedInUser } from './adapters/auth-adapter';
 import UsersPage from './pages/Users';
 import UserPage from './pages/User';
 import GamePage from './pages/GamePage'; // Import the GamePage
-import AboutUs from './components/AboutUs';
+import AboutUs from './pages/AboutUs';
 
 export default function App() {
   const { setCurrentUser } = useContext(UserContext);
