@@ -8,8 +8,10 @@ import {
 
 const baseUrl = "/api/users";
 
-export const createUser = async ({ username, password }) => {
-	return fetchHandler(baseUrl, getPostOptions({ username, password }));
+const createProfileUrl = "/api/create_user"
+
+export const createUser = async ({ username, password, organization, isAdmin }) => {
+	return fetchHandler(createProfileUrl, getPostOptions({ username, password, organization, isAdmin }));
 };
 
 // For this one adapter, if an error occurs, we handle it here by printing
