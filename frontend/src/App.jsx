@@ -9,7 +9,8 @@ import UserContext from './contexts/current-user-context';
 import { checkForLoggedInUser } from './adapters/auth-adapter';
 import UsersPage from './pages/Users';
 import UserPage from './pages/User';
-import GamePage from './pages/GamePage'; // Import the GamePage
+import GamePage from './pages/GamePage';
+import BudgetSelectionPage from './pages/GameSetupPage';
 import AboutUs from './pages/AboutUs';
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
           <Route path='/users' element={<UsersPage />} />
           <Route path='/users/:id' element={<UserPage />} />
           <Route path='/about' element={<AboutUs />} />
+          <Route path='/setup' element={<BudgetSelectionPage />} />
           <Route path='/game' element={<GamePage />} /> {/* Game Page Route */}
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
