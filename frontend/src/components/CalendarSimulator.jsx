@@ -241,15 +241,13 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
 
   return (
     <div className="container">
-      <div >
+      <div className={`main-content ${simulationOver ? 'full-width' : ''}`}>
         <h2>{months[currentMonth]} {currentYear}</h2>
-        
-        {!simulationOver && !monthInProgress && (
-          <button className='start-month-button' onClick={startMonth}>Start Month</button>
-        )}
-
+  
         {simulationOver ? (
-          <SummaryReport transactions={transactions} finalBreakdown={breakdown} />
+          <div className = 'summary' >
+            < SummaryReport transactions={transactions} finalBreakdown={breakdown} />
+          </div>
         ) : (
           <>
             {popup && (
@@ -259,7 +257,7 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
                 <button onClick={closePopup}>OK</button>
               </div>
             )}
-
+  
             {/* Calendar container */}
             <div className="calendar-container">
               <div className="calendar">
@@ -283,35 +281,39 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
                 </div>
               </div>
             </div>
-
+            {!simulationOver && !monthInProgress && (
+              <button className="start-month-button" onClick={startMonth}>Go</button>
+            )}
           </>
         )}
       </div>
-
-      <div className="sidebar">
-        <h3>Transaction Log</h3>
-        <ul className="transaction-list">
-          {Object.keys(transactions).map((monthIndex) => (
-            <li key={monthIndex}>
-              <h4>{months[monthIndex]}</h4>
-              <ul>
-                {transactions[monthIndex].map((transaction, index) => (
-                  <li
-                  key={index}
-                  className="transaction-item"
-                  style={{ color: transaction.amount > 0 ? '#6E954B' : '#9f1418' }}
-                >
-                  {transaction.name}: ${transaction.amount.toFixed(2)} ({transaction.type})
-                </li>
-                
-                ))}
-              </ul>
-            </li>
-          ))}
-          {/* Invisible div to mark the end of the list */}
-          <div ref={transactionEndRef} />
-        </ul>
-      </div>
+  
+      {/* Conditionally render sidebar */}
+      {!simulationOver && (
+        <div className="sidebar">
+          <h3>Transaction Log</h3>
+          <ul className="transaction-list">
+            {Object.keys(transactions).map((monthIndex) => (
+              <li key={monthIndex}>
+                <h4>{months[monthIndex]}</h4>
+                <ul>
+                  {transactions[monthIndex].map((transaction, index) => (
+                    <li
+                      key={index}
+                      className="transaction-item"
+                      style={{ color: transaction.amount > 0 ? '#6E954B' : '#9f1418' }}
+                    >
+                      {transaction.name}: ${transaction.amount.toFixed(2)} ({transaction.type})
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+            {/* Invisible div to mark the end of the list */}
+            <div ref={transactionEndRef} />
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

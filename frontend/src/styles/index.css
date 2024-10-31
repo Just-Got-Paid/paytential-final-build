@@ -16,7 +16,6 @@ body {
   padding: 1rem;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .main-content {
@@ -55,14 +54,18 @@ button:hover {
 
 /* === Calendar Component === */
 .calendar {
+  width: 100%; /* Full width within main content */
+  height: 100%; /* Set to 80% of viewport height, adjust as needed */
+  max-width: 1000px; /* Optionally set a max width */
+  margin: 0 auto; /* Center it if there's extra space */
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 5px;
-  margin-top: 1rem;
   padding: 1rem;
-  background-color: #f1f1f1;
+  background-color: #FBFEF9; /* Light background */
   border-radius: 8px;
 }
+
 
 .weekdays {
   display: grid;
@@ -740,6 +743,8 @@ nav a.active {
 .calendar-container {
   margin-top: 2rem;
   padding-right: 70px;
+  width: 90%; /* Full width within main content */
+  height: 50%; /* Set to 80% of viewport height, adjust as needed */
 }
 
 /* Popup Styling */
@@ -890,7 +895,36 @@ nav a.active {
 }
 
 
-.calendar {
- max-height: 500px;
+
+
+
+.start-month-button {
+  margin-top: 75px;
 }
 
+
+.container {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding-right: 1rem;
+}
+
+.full-width {
+  flex: 1;
+  padding-right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  width: 250px;
+}
+
+
+.summary {
+  display:flex;
+  justify-content: center;
+}
