@@ -841,3 +841,55 @@ nav a.active {
 .popup .cancel-button:hover {
   background-color: #8e1d28; 
 }
+
+
+/* Fade-in and slide-up animation */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Container animation */
+.container {
+  animation: fadeSlideIn 0.6s ease-out forwards;
+  animation-delay: 0.1s;
+  opacity: 0; /* Set initial opacity for animation to take effect */
+}
+
+/* Main content animation */
+.main-content {
+  animation: fadeSlideIn 0.6s ease-out forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+/* Sidebar animation */
+.sidebar {
+  animation: fadeSlideIn 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+/* Additional styling for sidebar items (optional) */
+.transaction-list .transaction-item {
+  animation: fadeSlideIn 0.4s ease-out forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+.transaction-list .transaction-item:nth-child(even) {
+  animation-delay: 0.5s;
+}
+.transaction-list .transaction-item:nth-child(odd) {
+  animation-delay: 0.6s;
+}
+
+
+.calendar {
+ max-height: 500px;
+}

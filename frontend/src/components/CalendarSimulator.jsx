@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SummaryReport from './SummaryReport';
 
 export default function CalendarSimulator({ breakdown, setBreakdown, monthlyIncome, lifestyleExpenses }) {
- 
+const transactionEndRef = useRef(null);
 
   const [currentMonth, setCurrentMonth] = useState(0);
   const [currentYear, setCurrentYear] = useState(2024);
@@ -224,6 +224,10 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
       return updatedBreakdown;
     });
   };
+  useEffect(() => {
+    transactionEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [transactions]);
+
 
   const closePopup = () => {
     setPopup(null);
@@ -256,33 +260,30 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
               </div>
             )}
 
-            <div className="calendar">
-              <div className="weekdays">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                  <div key={day} className="weekday">{day}</div>
-                ))}
-              </div>
-              <div className="days">
-                {Array.from({ length: startDay }).map((_, index) => (
-                  <div key={index} className="empty-day"></div>
-                ))}
-                {days.map((day) => (
-                  <div
-                    key={day}
-                    className={`day ${dayStates[day] === 'completed' ? 'completed' : ''} ${dayStates[day] === 'event-positive' ? 'event-positive' : ''} ${dayStates[day] === 'event-negative' ? 'event-negative' : ''}`}
-                  >
-                    {day}
-                  </div>
-                ))}
+            {/* Calendar container */}
+            <div className="calendar-container">
+              <div className="calendar">
+                <div className="weekdays">
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                    <div key={day} className="weekday">{day}</div>
+                  ))}
+                </div>
+                <div className="days">
+                  {Array.from({ length: startDay }).map((_, index) => (
+                    <div key={index} className="empty-day"></div>
+                  ))}
+                  {days.map((day) => (
+                    <div
+                      key={day}
+                      className={`day ${dayStates[day] === 'completed' ? 'completed' : ''} ${dayStates[day] === 'event-positive' ? 'event-positive' : ''} ${dayStates[day] === 'event-negative' ? 'event-negative' : ''}`}
+                    >
+                      {day}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* <h3>Remaining Balances</h3>
-            <ul>
-              <li>Needs: ${breakdown.needs.toFixed(2)}</li>
-              <li>Wants: ${breakdown.wants.toFixed(2)}</li>
-              <li>Savings: ${breakdown.savings.toFixed(2)}</li>
-            </ul> */}
           </>
         )}
       </div>
@@ -295,13 +296,18 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
               <h4>{months[monthIndex]}</h4>
               <ul>
                 {transactions[monthIndex].map((transaction, index) => (
-                  <li key={index} className={`transaction-item ${transaction.amount > 0 ? 'transaction-item-positive' : 'transaction-item-negative'}`}>
+                  <li
+                    key={index}
+                    className={`transaction-item ${transaction.amount > 0 ? 'transaction-item-positive' : 'transaction-item-negative'}`}
+                  >
                     {transaction.name}: ${transaction.amount.toFixed(2)} ({transaction.type})
                   </li>
                 ))}
               </ul>
             </li>
           ))}
+          {/* Invisible div to mark the end of the list */}
+          <div ref={transactionEndRef} />
         </ul>
       </div>
     </div>
