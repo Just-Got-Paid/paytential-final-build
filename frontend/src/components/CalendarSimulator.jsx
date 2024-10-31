@@ -241,11 +241,11 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
 
   return (
     <div className="container">
-      <div className="main-content">
+      <div >
         <h2>{months[currentMonth]} {currentYear}</h2>
         
         {!simulationOver && !monthInProgress && (
-          <button onClick={startMonth}>Start Month</button>
+          <button className='start-month-button' onClick={startMonth}>Start Month</button>
         )}
 
         {simulationOver ? (
@@ -297,11 +297,13 @@ if (isLeapYear(currentYear)) daysInMonth[1] = 29;
               <ul>
                 {transactions[monthIndex].map((transaction, index) => (
                   <li
-                    key={index}
-                    className={`transaction-item ${transaction.amount > 0 ? 'transaction-item-positive' : 'transaction-item-negative'}`}
-                  >
-                    {transaction.name}: ${transaction.amount.toFixed(2)} ({transaction.type})
-                  </li>
+                  key={index}
+                  className="transaction-item"
+                  style={{ color: transaction.amount > 0 ? '#6E954B' : '#9f1418' }}
+                >
+                  {transaction.name}: ${transaction.amount.toFixed(2)} ({transaction.type})
+                </li>
+                
                 ))}
               </ul>
             </li>

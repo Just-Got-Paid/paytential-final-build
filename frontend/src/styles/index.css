@@ -732,7 +732,6 @@ nav a.active {
   padding: 0.8rem;
   margin: 0.5rem 0;
   border-radius: 4px;
-  border-left: 4px solid #2b6c4b; /* Left border color for emphasis */
   color: #3a4a5d;
   font-weight: bold;
 }
@@ -740,6 +739,7 @@ nav a.active {
 /* Calendar Simulator Container */
 .calendar-container {
   margin-top: 2rem;
+  padding-right: 70px;
 }
 
 /* Popup Styling */
@@ -831,7 +831,7 @@ nav a.active {
 }
 
 .popup .cancel-button {
-  background-color: #d62839;
+  background-color: #48090B;
   border: none;
   font-weight: bold;
   cursor: pointer;
@@ -839,7 +839,7 @@ nav a.active {
 }
 
 .popup .cancel-button:hover {
-  background-color: #8e1d28; 
+  background-color: #310a0e; 
 }
 
 
@@ -893,3 +893,4 @@ nav a.active {
 .calendar {
  max-height: 500px;
 }
+
