@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import SummaryReport from './SummaryReport';
 
-export default function CalendarSimulator({ lifestyle, lifestyleOptions, breakdown, setBreakdown, monthlyIncome, lifestyleExpenses }) {
+export default function CalendarSimulator({ breakdown, setBreakdown, monthlyIncome, lifestyleExpenses }) {
+ 
+
   const [currentMonth, setCurrentMonth] = useState(0);
   const [currentYear, setCurrentYear] = useState(2024);
   const [popup, setPopup] = useState(null);
@@ -11,18 +13,18 @@ export default function CalendarSimulator({ lifestyle, lifestyleOptions, breakdo
   const [currentDay, setCurrentDay] = useState(1);
   const [monthInProgress, setMonthInProgress] = useState(false);
   const [monthlyEvents, setMonthlyEvents] = useState([]);
-
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const months = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"]
   const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const isLeapYear = (year) => (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-  if (isLeapYear(currentYear)) daysInMonth[1] = 29;
+if (isLeapYear(currentYear)) daysInMonth[1] = 29;
+
+
+
+  const rent = -lifestyleExpenses.housing;
+  const groceryExpenses = -lifestyleExpenses.food
 
   const days = Array.from({ length: daysInMonth[currentMonth] }, (_, i) => i + 1);
-  const utilitiesEvents = [
-    { name: 'Electric Bill', amount: -100, bucket: 'needs' },
-    { name: 'Water Bill', amount: -50, bucket: 'needs' },
-    { name: 'Internet Bill', amount: -60, bucket: 'needs' },
-  ];
 
    // Define random events pool
    const randomEvents = [
@@ -78,28 +80,44 @@ export default function CalendarSimulator({ lifestyle, lifestyleOptions, breakdo
     { description: "Extra pet supplies expense.", amount: -35, bucket: "needs" }
   ];
 
+  const utilitiesEvents = [
+    { name: 'Electric Bill', amount: -100, bucket: 'needs' },
+    { name: 'Water Bill', amount: -50, bucket: 'needs' },
+    { name: 'Internet Bill', amount: -60, bucket: 'needs' },
+  ];
+
   const startMonth = () => {
+    // End simulation if it’s December (month 11)
     if (currentMonth === 11) {
       setSimulationOver(true);
       return;
     }
-
-    transferToSavings();
+  
+    // Only transfer to savings if it's not January (month 0)
+    if (currentMonth !== 0) {
+      transferToSavings();
+    }
+  
+    // Replenish buckets at the start of each month
     replenishBuckets();
-
+    // Update month and year
     setCurrentMonth((prevMonth) => (prevMonth + 1) % 12);
     if (currentMonth === 11) setCurrentYear((prevYear) => prevYear + 1);
-
+  
+    // Set monthly events
     const eventCount = Math.floor(Math.random() * 4);
     const selectedEvents = Array.from({ length: eventCount }, () => randomEvents[Math.floor(Math.random() * randomEvents.length)]);
     setMonthlyEvents(selectedEvents);
-
+  
+    // Reset day states for the new month
     setCurrentDay(1);
     setDayStates({});
     setMonthInProgress(true);
-
+    
+    // Start daily progression
     advanceDay(1);
   };
+  
 
   const transferToSavings = () => {
     const totalTransfer = parseFloat((breakdown.needs + breakdown.wants).toFixed(2));
@@ -132,53 +150,48 @@ export default function CalendarSimulator({ lifestyle, lifestyleOptions, breakdo
     }));
   };
 
-  const advanceDay = (day) => {
-    if (day > daysInMonth[currentMonth]) {
+  const advanceDay = (day = currentDay) => {
+    if (!monthInProgress || day > daysInMonth[currentMonth]) {
       handleEndOfMonthEvents();
       return;
     }
 
-    // Mark the current day as completed
-    setDayStates((prevDayStates) => ({
-      ...prevDayStates,
-      [day]: 'completed',
-    }));
+    const newDayStates = { ...dayStates, [day]: 'completed' };
+    setDayStates(newDayStates);
     setCurrentDay(day);
 
-    // Check and apply grocery events on day 14 and 28
-    if (day === 14 || day === 28) {
-      const groceryExpense = lifestyleExpenses.food || 0; // Default to 0 if undefined
-      handleTransaction({ name: 'Groceries', amount: -groceryExpense, bucket: 'needs' });
+    if (day === 28) {
+      handleTransaction({ name: 'Food', amount: groceryExpenses, bucket: 'needs' });
       setDayStates((prev) => ({ ...prev, [day]: 'event-negative' }));
       return;
     }
 
-    // Handle random monthly events on selected days
-    if (monthlyEvents.length > 0 && (day % 6 === 0 || day % 5 === 0)) {
-      const event = monthlyEvents[monthlyEvents.length - 1]; // Peek at the last item
+    if (monthlyEvents.length > 0 && day % 3 === 0) {
+      const event = monthlyEvents.pop();
       handleTransaction(event);
       const eventClass = event.amount > 0 ? 'event-positive' : 'event-negative';
       setDayStates((prev) => ({ ...prev, [day]: eventClass }));
       setPopup({ name: event.description, amount: event.amount, bucket: event.bucket });
-
-      // Remove the processed event from monthlyEvents
-      setMonthlyEvents((prevEvents) => prevEvents.slice(0, -1));
       return;
     }
 
-    // Continue advancing days with a delay
-    setTimeout(() => {
-      setDayStates((prevDayStates) => ({
-        ...prevDayStates,
-        [day]: 'completed',
-      }));
-      advanceDay(day + 1);
-    }, 200);
+    setTimeout(() => advanceDay(day + 1), 200);
   };
 
-  
+  const handleEndOfMonthEvents = () => {
+    if (!monthInProgress ) return;
+    utilitiesEvents.forEach(event => handleTransaction(event));
+    const rentEvent = { name: 'Monthly Rent', amount: rent, bucket: 'needs' };
+    handleTransaction(rentEvent);
+    setMonthInProgress(false);
+  };
 
-  
+  useEffect(() => {
+    if (currentMonth >= 0) {
+      const rentEvent = { name: 'Monthly Rent', amount: rent, bucket: 'needs' };
+      handleTransaction(rentEvent);
+    }
+  }, [currentMonth]);
 
   const handleTransaction = (event) => {
     setPopup(event);
@@ -186,7 +199,6 @@ export default function CalendarSimulator({ lifestyle, lifestyleOptions, breakdo
       const { bucket, amount } = event;
       let updatedBreakdown = { ...prevBreakdown };
 
-      // Cascade deduction logic
       if (bucket === 'needs' && updatedBreakdown.needs < Math.abs(amount)) {
         if (updatedBreakdown.wants >= Math.abs(amount)) {
           updatedBreakdown.wants += amount;
@@ -211,25 +223,6 @@ export default function CalendarSimulator({ lifestyle, lifestyleOptions, breakdo
       }));
       return updatedBreakdown;
     });
-  };
-  const handleEndOfMonthEvents = () => {
-    if (!monthInProgress) return;
-  
-    // Deduct each utility expense
-    utilitiesEvents.forEach(event => handleTransaction(event));
-  
-    // Get the lifestyle expenses based on the selected lifestyle
-    const selectedLifestyleExpenses = lifestyleOptions[lifestyle]?.expenses || {};
-    
-    // Deduct monthly rent from needs bucket based on the lifestyle's housing expense
-    const rentEvent = { name: 'Monthly Rent', amount: -selectedLifestyleExpenses.housing, bucket: 'needs' };
-    handleTransaction(rentEvent);
-  
-    // Proceed to the next month and handle end of year
-    setCurrentMonth((prevMonth) => (prevMonth + 1) % 12);
-    if (currentMonth === 11) setCurrentYear((prevYear) => prevYear + 1);
-  
-    setMonthInProgress(false);
   };
 
   const closePopup = () => {
@@ -284,12 +277,12 @@ export default function CalendarSimulator({ lifestyle, lifestyleOptions, breakdo
               </div>
             </div>
 
-            <h3>Remaining Balances</h3>
+            {/* <h3>Remaining Balances</h3>
             <ul>
               <li>Needs: ${breakdown.needs.toFixed(2)}</li>
               <li>Wants: ${breakdown.wants.toFixed(2)}</li>
               <li>Savings: ${breakdown.savings.toFixed(2)}</li>
-            </ul>
+            </ul> */}
           </>
         )}
       </div>
