@@ -2,18 +2,15 @@ const Simulation = require("../models/Simulation");
 
 // Create a new simulation
 exports.createSimulation = async (req, res) => {
-	const { userId, currentMonth, netWorth, isComplete } = req.body;
-
+	const { userId } = req.body;
 	try {
-		const simulation = await Simulation.create(
-			userId,
-			currentMonth,
-			netWorth,
-			isComplete
-		);
-		res.status(201).json(simulation);
+		const simulation = await Simulation.create(userId, "january", 10000, false);
+		res.send(simulation);
+		// res.status(201).json(simulation);
 	} catch (error) {
-		res.status(500).json({ error: "Failed to create simulation." });
+		res
+			.status(500)
+			.json({ error: `Failed to create simulation. ${error.message}` });
 	}
 };
 
@@ -24,7 +21,7 @@ exports.showSimulation = async (req, res) => {
 	try {
 		const simulation = await Simulation.find(id);
 		if (!simulation) return res.sendStatus(404); // Not found
-		res.json(simulation);
+		res.send(simulation);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to retrieve simulation." });
 	}
@@ -38,7 +35,7 @@ exports.updateSimulation = async (req, res) => {
 	try {
 		const updatedSimulation = await Simulation.update(id, updates);
 		if (!updatedSimulation) return res.sendStatus(404); // Not found
-		res.json(updatedSimulation);
+		res.send(updatedSimulation);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to update simulation." });
 	}
