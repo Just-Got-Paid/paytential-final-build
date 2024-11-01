@@ -16,6 +16,16 @@ export default function UserPage() {
   const isCurrentUserProfile = currentUser && currentUser.id === Number(id);
 
   useEffect(() => {
+    const loadUser = async () => {
+      const [user, error] = await getUser(id);
+      if (error) return setErrorText(error.message);
+      setUserProfile(user);
+    };
+    loadUser();
+  }, [id]);
+
+
+  useEffect(() => {
     if (redirectToGame) {
       navigate('/game');
       setRedirectToGame(false); // Reset the redirect trigger
