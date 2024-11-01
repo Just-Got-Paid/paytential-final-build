@@ -16,7 +16,6 @@ body {
   padding: 1rem;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .main-content {
@@ -55,14 +54,18 @@ button:hover {
 
 /* === Calendar Component === */
 .calendar {
+  width: 100%; /* Full width within main content */
+  height: 100%; /* Set to 80% of viewport height, adjust as needed */
+  max-width: 1000px; /* Optionally set a max width */
+  margin: 0 auto; /* Center it if there's extra space */
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 5px;
-  margin-top: 1rem;
   padding: 1rem;
-  background-color: #f1f1f1;
+  background-color: #FBFEF9; /* Light background */
   border-radius: 8px;
 }
+
 
 .weekdays {
   display: grid;
@@ -732,7 +735,6 @@ nav a.active {
   padding: 0.8rem;
   margin: 0.5rem 0;
   border-radius: 4px;
-  border-left: 4px solid #2b6c4b; /* Left border color for emphasis */
   color: #3a4a5d;
   font-weight: bold;
 }
@@ -740,6 +742,9 @@ nav a.active {
 /* Calendar Simulator Container */
 .calendar-container {
   margin-top: 2rem;
+  padding-right: 70px;
+  width: 90%; /* Full width within main content */
+  height: 50%; /* Set to 80% of viewport height, adjust as needed */
 }
 
 /* Popup Styling */
@@ -831,7 +836,7 @@ nav a.active {
 }
 
 .popup .cancel-button {
-  background-color: #d62839;
+  background-color: #48090B;
   border: none;
   font-weight: bold;
   cursor: pointer;
@@ -839,5 +844,87 @@ nav a.active {
 }
 
 .popup .cancel-button:hover {
-  background-color: #8e1d28; 
+  background-color: #310a0e; 
+}
+
+
+/* Fade-in and slide-up animation */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Container animation */
+.container {
+  animation: fadeSlideIn 0.6s ease-out forwards;
+  animation-delay: 0.1s;
+  opacity: 0; /* Set initial opacity for animation to take effect */
+}
+
+/* Main content animation */
+.main-content {
+  animation: fadeSlideIn 0.6s ease-out forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+/* Sidebar animation */
+.sidebar {
+  animation: fadeSlideIn 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+/* Additional styling for sidebar items (optional) */
+.transaction-list .transaction-item {
+  animation: fadeSlideIn 0.4s ease-out forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+.transaction-list .transaction-item:nth-child(even) {
+  animation-delay: 0.5s;
+}
+.transaction-list .transaction-item:nth-child(odd) {
+  animation-delay: 0.6s;
+}
+
+
+
+
+
+.start-month-button {
+  margin-top: 75px;
+}
+
+
+.container {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding-right: 1rem;
+}
+
+.full-width {
+  flex: 1;
+  padding-right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  width: 250px;
+}
+
+
+.summary {
+  display:flex;
+  justify-content: center;
 }

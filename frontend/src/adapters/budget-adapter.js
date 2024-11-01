@@ -5,7 +5,7 @@ import {
 	getPatchOptions,
 } from "../utils/fetchingUtils";
 
-const baseUrl = "/api/budget";
+const baseUrl = '/api/budget';
 
 // Get all budgets for a specific simulation
 export const getBudgetsBySimulationId = async (simulationId) => {

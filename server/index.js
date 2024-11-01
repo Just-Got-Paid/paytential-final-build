@@ -36,8 +36,7 @@ app.use("/api/event", eventRoutes);
 app.use("/api/simulations", simulationRoutes);
 app.use("/api/transactionHistory", transactionHistoryRoutes);
 app.use("/api/userProfile", userProfileRoutes);
-app.use("/api/user", userRoutes);
-
+app.use("/api/users", userRoutes);
 app.post("/api/create_user", createUserProfileController.createUser);
 
 ///////////////////////////////
