@@ -2,11 +2,11 @@ const express = require("express");
 const userProfileRouter = express.Router();
 const userProfileControllers = require("../controllers/userProfileControllers");
 
-// Get a user profile by user_id
-userProfileRouter.get("/:userId", userProfileControllers.showUserProfile);
+// Get a user profile by user_id, joined with user details
+userProfileRouter.get("/", userProfileControllers.showUserProfile);
 
 // Create a new user profile
-userProfileRouter.post("/", userProfileControllers.createUserProfile);
+// userProfileRouter.post("/", userProfileControllers.createUserProfile);
 
 // Update an existing user profile
 userProfileRouter.put("/:userId", userProfileControllers.updateUserProfile);
@@ -19,5 +19,7 @@ userProfileRouter.get(
 	"/organization/:organization",
 	userProfileControllers.findUserProfilesByOrganization
 );
+
+userProfileRouter.get('/organization/users')
 
 module.exports = userProfileRouter;

@@ -1,12 +1,13 @@
 const UserProfile = require("../models/UserProfile");
 
-// Get a user profile by user_id
+// Get a user profile by user_id, joined with user details
 exports.showUserProfile = async (req, res) => {
-	const { userId } = req.params;
-
+	const { userId } = req.session; 
+	console.log(userId)
 	try {
 		const userProfile = await UserProfile.find(userId);
 		if (!userProfile) return res.sendStatus(404); // Not found
+		console.log(userProfile)
 		res.json(userProfile);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to retrieve user profile." });
@@ -68,7 +69,8 @@ exports.findUserProfilesByOrganization = async (req, res) => {
 
 	try {
 		const profiles = await UserProfile.findByOrganization(organization);
-		res.json(profiles);
+		console.log("profiles array",profiles);
+		res.send(profiles);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to retrieve user profiles." });
 	}

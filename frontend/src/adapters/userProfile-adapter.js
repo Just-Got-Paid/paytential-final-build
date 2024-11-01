@@ -6,19 +6,13 @@ import {
 	getDeleteOptions,
 } from "../utils/fetchingUtils";
 
-const baseUrl = "/api/user-profiles";
+const baseUrl = "/api/userProfile";
 
-// Create a new user profile
-export const createUserProfile = async ({ userId, organization, isAdmin }) => {
-	return fetchHandler(
-		baseUrl,
-		getPostOptions({ userId, organization, isAdmin })
-	);
-};
+const deleteUrl = "/api/delete_user/";
 
 // Get a user profile by user ID
-export const getUserProfile = async (userId) => {
-	return fetchHandler(`${baseUrl}/${userId}`);
+export const getUserProfile = async () => {
+	return fetchHandler(`${baseUrl}`);
 };
 
 // Update an existing user profile
@@ -28,10 +22,11 @@ export const updateUserProfile = async (userId, updates) => {
 
 // Delete a user profile by user ID
 export const deleteUserProfile = async (userId) => {
-	return fetchHandler(`${baseUrl}/${userId}`, getDeleteOptions());
+	return fetchHandler(`${deleteUrl}/${userId}`, getDeleteOptions);
 };
 
 // Get all user profiles by organization
 export const getUserProfilesByOrganization = async (organization) => {
+	console.log(organization)
 	return fetchHandler(`${baseUrl}/organization/${organization}`);
 };

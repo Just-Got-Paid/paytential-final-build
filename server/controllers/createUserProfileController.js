@@ -24,6 +24,7 @@ exports.createUser = async (req, res) => {
   const userInfo = await UserProfile.find(newUser.id)
 
   req.session.userId = newUser.id;
+  // console.log(req.session.userId)
 
   res.send(userInfo);
 };

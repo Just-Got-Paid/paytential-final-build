@@ -9,10 +9,12 @@ class User {
 	// static methods to hide the hashed password of users before sending user data
 	// to the client. Since we want to keep the #passwordHash property private, we
 	// provide the isValidPassword instance method as a way to indirectly access it.
-	constructor({ id, username, password_hash }) {
+	constructor({ id, username, password_hash, organization, is_admin}) {
 		this.id = id;
 		this.username = username;
 		this.#passwordHash = password_hash;
+		this.organization = organization;
+		this.isAdmin = is_admin;
 	}
 
 	// This instance method takes in a plain-text password and returns true if it matches
@@ -32,17 +34,26 @@ class User {
 	// the given user id. If it finds a user, uses the constructor
 	// to format the user and returns or returns null if not.
 	static async find(id) {
-		const query = `SELECT * FROM users WHERE id = ?`;
+		const query = `SELECT u.*, up.*
+    FROM users AS u
+    JOIN user_profile AS up ON u.id = up.user_id
+    WHERE u.id = ?;`; //  
 		const result = await knex.raw(query, [id]);
 		const rawUserData = result.rows[0];
-		return rawUserData ? new User(rawUserData) : null;
+		return rawUserData ? new User(rawUserData) : null; //
 	}
 
 	// Same as above but uses the username to find the user
 	static async findByUsername(username) {
-		const query = `SELECT * FROM users WHERE username = ?`;
+		const query = `
+			SELECT u.*, up.*
+			FROM users AS u
+			JOIN user_profile AS up ON u.id = up.user_id
+			WHERE u.username = ?
+		`;
 		const result = await knex.raw(query, [username]);
 		const rawUserData = result.rows[0];
+		console.log(new User(rawUserData))
 		return rawUserData ? new User(rawUserData) : null;
 	}
 
@@ -71,6 +82,7 @@ class User {
     `;
 		const result = await knex.raw(query, [username, id]);
 		const rawUpdatedUser = result.rows[0];
+		console.log(rawUpdatedUser)
 		return rawUpdatedUser ? new User(rawUpdatedUser) : null;
 	}
 

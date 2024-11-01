@@ -21,6 +21,7 @@ const checkAuthentication = require("./middleware/checkAuthentication");
 const authControllers = require("./controllers/authControllers");
 const userControllers = require("./controllers/userControllers");
 const createUserProfileController = require("./controllers/createUserProfileController")
+const deleteUserProfileController = require("./controllers/deleteUserProfileController");
 const app = express();
 
 // middleware
@@ -33,13 +34,13 @@ app.use(express.static(path.join(__dirname, "../frontend/dist"))); // Serve stat
 app.use("/api", authRoutes);
 app.use("/api/budget", budgetRoutes);
 app.use("/api/event", eventRoutes);
-app.use("/api/simulation", simulationRoutes);
+app.use("/api/simulations", simulationRoutes);
 app.use("/api/transactionHistory", transactionHistoryRoutes);
 app.use("/api/userProfile", userProfileRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 
 app.post("/api/create_user", createUserProfileController.createUser)
-
+app.delete("/api/delete_user/:user_id", deleteUserProfileController.deleteUser);
 ///////////////////////////////
 // Fallback Route
 ///////////////////////////////

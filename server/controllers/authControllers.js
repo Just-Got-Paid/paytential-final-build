@@ -12,8 +12,9 @@ exports.loginUser = async (req, res) => {
 
   const isPasswordValid = await user.isValidPassword(password);
   if (!isPasswordValid) return res.sendStatus(401);
-
+  // console.log(user)
   req.session.userId = user.id;
+  // console.log(req.session.userId)
   res.send(user);
 };
 
@@ -28,7 +29,6 @@ exports.logoutUser = (req, res) => {
 // or returns the user based on the userId stored on the client's cookie
 exports.showMe = async (req, res) => {
   if (!req.session.userId) return res.sendStatus(401);
-
   const user = await User.find(req.session.userId);
   res.send(user);
 };

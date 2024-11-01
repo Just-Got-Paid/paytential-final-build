@@ -24,7 +24,7 @@ export default function App() {
       <SiteHeadingAndNav />
       <main>
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<Home />} /> {/* This is for before login/sign-up*/}
           <Route path='/login' element={<LoginPage />} />
           <Route path='/sign-up' element={<SignUpPage />} />
           <Route path='/users' element={<UsersPage />} />

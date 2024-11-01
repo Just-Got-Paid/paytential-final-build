@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate, Navigate, Link } from "react-router-dom";
 import CurrentUserContext from "../contexts/current-user-context";
 import { createUser } from "../adapters/user-adapter";
-import { createUserProfile } from "../adapters/userProfile-adapter";
 
 export default function SignUpPage() {
   const navigate = useNavigate();

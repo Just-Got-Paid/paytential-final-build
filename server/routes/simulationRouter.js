@@ -5,10 +5,18 @@ const simulationControllers = require("../controllers/simulationControllers");
 // Create a new simulation
 simulationRouter.post("/", simulationControllers.createSimulation);
 
-// Get a simulation by ID
-simulationRouter.get("/:id", simulationControllers.showSimulation);
+// Get simulations by User Id
+simulationRouter.get("/:id", simulationControllers.getSimulationsByUser);
 
-// Update a simulation by ID
-simulationRouter.put("/:id", simulationControllers.updateSimulation);
+// Get a simulation by ID
+// simulationRouter.get("/:id", simulationControllers.showSimulation);
+
+// Update a simulation by sim ID
+simulationRouter.patch("/:id", simulationControllers.updateSimulation);
+
+// Delete a simulation by sim ID
+simulationRouter.delete("/:id", simulationControllers.deleteSimulation);
 
 module.exports = simulationRouter;
+
+

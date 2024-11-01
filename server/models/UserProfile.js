@@ -16,8 +16,8 @@ class UserProfile {
       WHERE up.user_id = ?
     `;
 		const result = await knex.raw(query, [userId]);
-		const rawData = result.rows[0];
-		return rawData ? new UserProfile(rawData) : null;
+		const rawData = result.rows[0]; 
+		return rawData ? rawData : null;
 	}
 
 	// Create a new user profile
@@ -57,7 +57,8 @@ class UserProfile {
       WHERE up.organization = ? AND up.is_admin = false
     `;
 		const result = await knex.raw(query, [organization]);
-		return result.rows.map((data) => new UserProfile(data));
+		// return result.rows.map((data) => new UserProfile(data));
+		return result.rows;
 	}
 }
 
