@@ -35,7 +35,7 @@ exports.showBudget = async (req, res) => {
 	try {
 		const budget = await Budget.find(id);
 		if (!budget) return res.sendStatus(404); // Not found
-		res.json(budget);
+		res.send(budget);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to retrieve budget." });
 	}
@@ -44,6 +44,7 @@ exports.showBudget = async (req, res) => {
 // Create a new budget
 exports.createBudget = async (req, res) => {
 	const { simulationId, needs, wants, savings, lifeStyle } = req.body;
+	console.log('hi', simulationId, needs, wants, savings, lifeStyle)
 
 	try {
 		const budget = await Budget.create(
@@ -53,7 +54,7 @@ exports.createBudget = async (req, res) => {
 			savings,
 			lifeStyle
 		);
-		res.status(201).json(budget);
+		res.send(budget);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to create budget." });
 	}

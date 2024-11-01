@@ -9,9 +9,9 @@ import UserContext from './contexts/current-user-context';
 import { checkForLoggedInUser } from './adapters/auth-adapter';
 import UsersPage from './pages/Users';
 import UserPage from './pages/User';
-import GamePage from './pages/GamePage';
 import BudgetSelectionPage from './pages/GameSetupPage';
 import AboutUs from './pages/AboutUs';
+import CalendarSimulator from './components/CalendarSimulator';
 
 export default function App() {
   const { setCurrentUser } = useContext(UserContext);
@@ -32,7 +32,7 @@ export default function App() {
           <Route path='/users/:id' element={<UserPage />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/setup' element={<BudgetSelectionPage />} />
-          <Route path='/game' element={<GamePage />} /> {/* Game Page Route */}
+          <Route path='/game' element={<CalendarSimulator />} /> {/* Game Page Route */}
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </main>

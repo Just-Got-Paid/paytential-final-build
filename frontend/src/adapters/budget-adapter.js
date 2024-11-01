@@ -1,7 +1,7 @@
 // Import the necessary utility functions for making API requests
 import { fetchHandler, getPostOptions, getPatchOptions } from "../utils/fetchingUtils";
 
-const baseUrl = '/api/budgets';
+const baseUrl = '/api/budget';
 
 // Get all budgets for a specific simulation
 export const getBudgetsBySimulationId = async (simulationId) => {
