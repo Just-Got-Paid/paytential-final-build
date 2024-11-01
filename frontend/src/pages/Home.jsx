@@ -1,12 +1,43 @@
-import { useEffect } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// For creating simulations to DB
+import { createSimulation } from '../adapters/simulation-adapter'
+import CurrentUserContext from "../contexts/current-user-context";
+import { getUser } from "../adapters/user-adapter";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { currentUser } = useContext(CurrentUserContext);
+  const [userProfile, setUserProfile] = useState(null); // State for user profile
+  const [errorText, setErrorText] = useState(null);
 
   const handleGetStarted = () => {
     navigate('/sign-up');
   };
+
+  const id = currentUser ? Number(currentUser.id) : null; // Only set id if currentUser is defined
+
+  useEffect(() => {
+    if (id) {
+      const loadUser = async () => {
+        const [user, error] = await getUser(id);
+        if (error) return setErrorText(error.message);
+        setUserProfile(user);
+      };
+      loadUser();
+    }
+  }, [id]);
+  
+  const handleCreateSession = async () => {
+    try {
+      await createSimulation({ userId: id });
+      navigate('/setup');
+    } catch (error) {
+      setErrorText("Failed to create simulation session.");
+      console.error("Simulation creation error:", error);
+    }
+  }
 
   useEffect(() => {
     const container = document.querySelector('.home-container');
@@ -28,7 +59,12 @@ export default function HomePage() {
         <button className="cta-button" onClick={handleGetStarted}>
           Get Started
         </button>
+        <button className="cta-button" onClick={handleCreateSession}>
+          Start Simulation
+        </button>
       </div>
+
+      {errorText && <p className="error-message">{errorText}</p>}
 
       <section className="features-section">
         <div className="feature">

@@ -8,16 +8,8 @@ import {
 const baseUrl = "/api/simulations";
 
 // Create a new simulation
-export const createSimulation = async ({
-	userId,
-	currentMonth,
-	netWorth,
-	isComplete,
-}) => {
-	return fetchHandler(
-		baseUrl,
-		getPostOptions({ userId, currentMonth, netWorth, isComplete })
-	);
+export const createSimulation = async ({ userId }) => {
+	return fetchHandler(baseUrl, getPostOptions({ userId }));
 };
 
 // Get a simulation by ID
