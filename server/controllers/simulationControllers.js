@@ -5,6 +5,7 @@ exports.createSimulation = async (req, res) => {
 	const { userId } = req.body;
 	try {
 		const simulation = await Simulation.create(userId, "january", 10000, false);
+		console.log(simulation, "inside try");
 		res.send(simulation);
 		// res.status(201).json(simulation);
 	} catch (error) {
