@@ -6,7 +6,7 @@ import {
 	getDeleteOptions,
 } from "../utils/fetchingUtils";
 
-const baseUrl = "/api/transactions";
+const baseUrl = "/api/transactionHistory";
 
 // Create a new transaction
 export const createTransaction = async ({

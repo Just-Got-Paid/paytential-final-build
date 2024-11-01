@@ -37,7 +37,6 @@ export default function HomePage() {
       setErrorText("User ID not found. Please sign in again.");
       return;
     }
-
     try {
       const response = await createSimulation({ userId: id });
       

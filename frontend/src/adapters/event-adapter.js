@@ -1,7 +1,7 @@
 // Import the necessary utility functions for making API requests
 import { fetchHandler } from "../utils/fetchingUtils";
 
-const baseUrl = "/api/events";
+const baseUrl = "/api/event";
 
 // Get an event by ID
 export const getEvent = async (id) => {
