@@ -1,49 +1,64 @@
 import { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// For creating simulations to DB
-import { createSimulation } from '../adapters/simulation-adapter'
+import { createSimulation } from '../adapters/simulation-adapter';
 import CurrentUserContext from "../contexts/current-user-context";
 import { getUser } from "../adapters/user-adapter";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const { currentUser } = useContext(CurrentUserContext);
-  const [userProfile, setUserProfile] = useState(null); // State for user profile
+  const [userProfile, setUserProfile] = useState(null); 
   const [errorText, setErrorText] = useState(null);
+
+  const id = currentUser ? Number(currentUser.id) : null;
+
+  // Load user profile if ID is available
+  useEffect(() => {
+    if (id) {
+      const loadUser = async () => {
+        const [user, error] = await getUser(id);
+        if (error) {
+          setErrorText(error.message);
+          console.error("Error fetching user:", error);
+        } else {
+          setUserProfile(user);
+        }
+      };
+      loadUser();
+    }
+  }, [id]);
 
   const handleGetStarted = () => {
     navigate('/sign-up');
   };
 
-  const id = currentUser ? Number(currentUser.id) : null; // Only set id if currentUser is defined
-
-  useEffect(() => {
-    if (id) {
-      const loadUser = async () => {
-        const [user, error] = await getUser(id);
-        if (error) return setErrorText(error.message);
-        setUserProfile(user);
-      };
-      loadUser();
-    }
-  }, [id]);
-  
   const handleCreateSession = async () => {
+    if (!id) {
+      setErrorText("User ID not found. Please sign in again.");
+      return;
+    }
+
     try {
-      await createSimulation({ userId: id });
-      navigate('/setup');
+      const response = await createSimulation({ userId: id });
+      
+      // Ensure simulation ID is returned in the response
+      if (response) {
+        const simulationId = response[0].id;
+        navigate('/setup', { state: { simulationId } });
+      } else {
+        setErrorText("Simulation ID not received. Please try again.");
+        console.error("Simulation creation failed: Simulation ID missing in response.", response);
+      }
     } catch (error) {
-      setErrorText("Failed to create simulation session.");
+      setErrorText("Failed to create simulation session. Please try again.");
       console.error("Simulation creation error:", error);
     }
-  }
+  };
 
   useEffect(() => {
     const container = document.querySelector('.home-container');
     const heroSection = document.querySelector('.hero-section');
     
-    // Add classes to trigger animations
     container.classList.add('fade-in');
     heroSection.classList.add('fade-in-bottom');
   }, []);

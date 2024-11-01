@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { createBudget } from "../adapters/budget-adapter";
 
-const incomeLevels = [45000, 75000, 125000, 200000]; // Income options
+const incomeLevels = [45000, 75000, 125000, 200000];
 
 // Define lifestyle options focusing only on expenses
 const lifestyleOptions = {
   basic: { expenses: { housing: 950, transportation: 200, food: 400, misc: 350 } },
-  moderate: { expenses: { housing: 1500, transportation: 300, food: 750, misc: 500} },
-  luxury: { expenses: { housing: 2500, transportation: 500, food: 1000,  misc: 1000} },
+  moderate: { expenses: { housing: 1500, transportation: 300, food: 750, misc: 500 } },
+  luxury: { expenses: { housing: 2500, transportation: 500, food: 1000, misc: 1000 } },
 };
 
 const BudgetSelectionPage = () => {
+  const location = useLocation();
+  const { simulationId } = location.state || {};
   const [income, setIncome] = useState("");
   const [taxes, setTaxes] = useState(0);
   const [needs, setNeeds] = useState(0);
   const [savings, setSavings] = useState(0);
   const [wants, setWants] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedLifestyle, setSelectedLifestyle] = useState(""); // Lifestyle selection
-  const [lifestyleExpenses, setLifestyleExpenses] = useState({}); // Store selected lifestyle expenses
-
+  const [selectedLifestyle, setSelectedLifestyle] = useState("");
+  const [lifestyleExpenses, setLifestyleExpenses] = useState({});
   const navigate = useNavigate();
 
   // Update taxes and budget based on income selection
@@ -63,6 +64,13 @@ const BudgetSelectionPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if simulationId is available
+    if (!simulationId) {
+      setErrorMessage("Simulation ID not found. Please restart the game.");
+      return;
+    }
+
     const totalExpenses = lifestyleExpenses.housing + lifestyleExpenses.food + lifestyleExpenses.transportation + lifestyleExpenses.misc + taxes;
 
     if (totalExpenses > income) {
@@ -74,15 +82,16 @@ const BudgetSelectionPage = () => {
       
       // Create budget in the database
       const budgetData = {
+        simulationId,
         needs,
         wants,
         savings,
-        // expenses: lifestyleExpenses,
         lifeStyle: selectedLifestyle,
       };
+      
       try {
         await createBudget(budgetData); // Create the budget using the adapter
-        console.log(budgetData)
+        console.log("Budget created:", budgetData); // Debug: Check data before navigation
         navigate("/game"); // Navigate to the game page on success
       } catch (error) {
         setErrorMessage("Failed to create budget. Please try again.");
@@ -90,6 +99,7 @@ const BudgetSelectionPage = () => {
       }
     }
   };
+
   return (
     <div className="budget-page">
       <section className="game-rules">
