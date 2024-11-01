@@ -6,7 +6,7 @@ import {
 	getPatchOptions,
 } from "../utils/fetchingUtils";
 
-const baseUrl = "/api/users";
+const baseUrl = "/api/user";
 
 const createProfileUrl = "/api/create_user"
 

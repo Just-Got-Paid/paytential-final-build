@@ -6,7 +6,7 @@ import {
 	getDeleteOptions,
 } from "../utils/fetchingUtils";
 
-const baseUrl = "/api/user-profiles";
+const baseUrl = "/api/userProfile";
 
 // Create a new user profile
 export const createUserProfile = async ({ userId, organization, isAdmin }) => {

@@ -30,6 +30,7 @@ export default function HomePage() {
   }, [id]);
   
   const handleCreateSession = async () => {
+    console.log(currentUser)
     try {
       await createSimulation({ userId: id });
       navigate('/setup');
